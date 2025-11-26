@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>res/qml/common/qmldir</file>
+        <file>res/qml/common/app_singleton.qml</file>
+        <file>res/qml/common/app_ver_txt.qml</file>
+        <file>res/qml/common/fade_stack_layout.qml</file>
+        <file>res/qml/main.qml</file>
+        <file>res/qml/pages/init_page.qml</file>
+        <file>res/qml/pages/qmldir</file>
+    </qresource>
+</RCC>

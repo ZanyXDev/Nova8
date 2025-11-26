@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/sounds/bl.wav</file>
+        <file>res/sounds/br.wav</file>
+        <file>res/sounds/broken.wav</file>
+        <file>res/sounds/chicken.wav</file>
+        <file>res/sounds/gameover.wav</file>
+        <file>res/sounds/score.wav</file>
+        <file>res/sounds/tl.wav</file>
+        <file>res/sounds/tr.wav</file>
+    </qresource>
+</RCC>
