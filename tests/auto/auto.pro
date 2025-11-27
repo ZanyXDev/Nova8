@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 SUBDIRS += \
-	tst_carmodel \
+	tst_imageprovider \
