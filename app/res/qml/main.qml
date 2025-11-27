@@ -22,8 +22,8 @@ QQC2.ApplicationWindow {
   // ----- Signal declarations
 
   // ----- Size information
-  width: (screenOrientation === Qt.PortraitOrientation) ? 640 : 360
-  height: (screenOrientation === Qt.PortraitOrientation) ? 360 : 640
+  width: (screenOrientation === Qt.PortraitOrientation) ? 360 : 640
+  height: (screenOrientation === Qt.PortraitOrientation) ? 640 : 360
   maximumHeight: height
   maximumWidth: width
 
@@ -49,7 +49,6 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
-
 
   // ----- Qt provided non-visual children
 
