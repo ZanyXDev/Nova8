@@ -20,12 +20,14 @@
 #endif
 
 #include "hal.h"
-
+#include "imageprovider.h"
+#include "engine.h"
 
 int main(int argc, char *argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 #endif
+    QScopedPointer<Engine> m_engine(new Engine);
     // Allocate [Hal] before the engine to ensure that it outlives it !!
     QScopedPointer<Hal> m_hal(new Hal);   
     m_hal->createAppFolder();
@@ -52,6 +54,10 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
     engine.addImportPath("qrc:/res/qml");
     QQmlContext *context = engine.rootContext();
+    // Регистрируем провайдера изображений
+    ImageProvider *imageProvider = new ImageProvider();
+    engine.addImageProvider("virtual_screen", imageProvider);
+    m_engine->setImageProvider(imageProvider);
 
 #ifdef Q_OS_ANDROID    
     QtAndroid::hideSplashScreen();
@@ -79,6 +85,7 @@ int main(int argc, char *argv[]) {
     // Register the singleton type provider with QML by calling this
     // function in an initialization function.
     qmlRegisterSingletonInstance("io.github.zanyxdev.nova8.hal", 1, 0,"HAL", m_hal.get());
+    qmlRegisterSingletonInstance("io.github.zanyxdev.nova8.engine", 1, 0,"ENGINE", m_engine.get());
     engine.load(url);
 
     return app.exec();

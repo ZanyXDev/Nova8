@@ -7,6 +7,7 @@ import common 1.0
 import pages 1.0
 import io.github.zanyxdev.nova8 1.0
 import io.github.zanyxdev.nova8.hal 1.0
+import io.github.zanyxdev.nova8.engine 1.0
 
 QQC2.ApplicationWindow {
   id: appWnd
@@ -49,7 +50,31 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
+  ColumnLayout {
+    id: main
+    anchors.fill: parent
+    spacing: 4
 
+    // Статус бар
+    Image {
+      id: statusBarImg
+      Layout.preferredWidth: 128 * ENGINE.scale
+      Layout.preferredHeight: 16 * ENGINE.scale
+      Layout.alignment: Qt.AlignHCenter
+      source: "image://virtual_screen/128x16/statusbar"
+      fillMode: Image.PreserveAspectFit
+    }
+
+    // Основной экран
+    Image {
+      id: screenImg
+      Layout.preferredWidth: 128 * ENGINE.scale
+      Layout.preferredHeight: 128 * ENGINE.scale
+      Layout.alignment: Qt.AlignHCenter
+      source: "image://virtual_screen/128x128/screen"
+      fillMode: Image.PreserveAspectFit
+    }
+  }
   // ----- Qt provided non-visual children
 
   // ----- Custom non-visual children
@@ -63,8 +88,5 @@ QQC2.ApplicationWindow {
   function moveToCenter() {
     appWnd.y = (screenAvailableHeight / 2) - (height / 2)
     appWnd.x = (screenAvailableWidth / 2) - (width / 2)
-  }
-  function bellAnimationFinished() {
-    console.log("bellAnimationFinished()")
   }
 }
