@@ -68,11 +68,29 @@ QQC2.ApplicationWindow {
     // Основной экран
     Image {
       id: screenImg
-      Layout.preferredWidth: 128 * ENGINE.scale
-      Layout.preferredHeight: 128 * ENGINE.scale
+      Layout.preferredWidth: ENGINE.virtScreenWidth * ENGINE.scale
+      Layout.preferredHeight: ENGINE.virtScreenHeight * ENGINE.scale
       Layout.alignment: Qt.AlignHCenter
-      source: "image://virtual_screen/128x128/screen"
+      source: "image://virtual_screen/" + ENGINE.virtScreenWidth + "x" + ENGINE.virtScreenHeight + "/screen"
       fillMode: Image.PreserveAspectFit
+    }
+    QQC2.Button {
+      id: selectChip8
+      Layout.preferredWidth: 72
+      Layout.preferredHeight: 72
+      text: "CHIP-8"
+      onClicked: {
+        ENGINE.devType = 1
+      }
+    }
+    QQC2.Button {
+      id: selectNova8
+      Layout.preferredWidth: 72
+      Layout.preferredHeight: 72
+      text: "NOVA-8"
+      onClicked: {
+        ENGINE.devType = 2
+      }
     }
   }
   // ----- Qt provided non-visual children

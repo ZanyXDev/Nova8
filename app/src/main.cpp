@@ -22,6 +22,7 @@
 #include "hal.h"
 #include "imageprovider.h"
 #include "engine.h"
+#include "virtualdevice.h"
 
 int main(int argc, char *argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -86,6 +87,10 @@ int main(int argc, char *argv[]) {
     // function in an initialization function.
     qmlRegisterSingletonInstance("io.github.zanyxdev.nova8.hal", 1, 0,"HAL", m_hal.get());
     qmlRegisterSingletonInstance("io.github.zanyxdev.nova8.engine", 1, 0,"ENGINE", m_engine.get());
+    // Register StatusClass as an uncreatable type in QML
+    qmlRegisterUncreatableType<VirtualDevice>(
+        "io.github.zanyxdev.nova8.virtualdevice", 1, 0, "VirtualDevice", "Not creatable as it is an enum type."
+        );
     engine.load(url);
 
     return app.exec();

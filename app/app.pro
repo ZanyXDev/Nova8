@@ -34,14 +34,18 @@ HEADERS += \
         src/engine.h \
         src/imageprovider.h \
         src/datamanager.h \
-        src/hal.h 
+        src/hal.h  \
+        src/keyboard.h \
+        src/virtualdevice.h
 
 SOURCES += \
             src/engine.cpp \
             src/imageprovider.cpp \
             src/datamanager.cpp \
+            src/keyboard.cpp \
             src/main.cpp \
-            src/hal.cpp 
+            src/hal.cpp  \
+            src/virtualdevice.cpp
 
 RESOURCES += \       
         qml.qrc \
