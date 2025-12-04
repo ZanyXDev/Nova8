@@ -9,7 +9,9 @@ ImageProvider::ImageProvider()
     m_images["128x16/statusbar"].fill(Qt::blue);
 
     m_images["128x128/screen"] = QImage(128, 128, QImage::Format_RGB32);
-    m_images["128x128/screen"].fill(Qt::black);
+    m_images["128x128/screen"].fill(Qt::lightGray);
+    m_images["64x32/screen"] = QImage(64, 32, QImage::Format_RGB32);
+    m_images["64x32/screen"].fill(Qt::green);
 }
 
 ImageProvider::~ImageProvider()

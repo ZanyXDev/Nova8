@@ -4,7 +4,7 @@
 Engine::Engine(QObject *parent)
     : QObject{parent}
     , m_imageProvider ( nullptr )
-    , m_scale ( 2 )
+    , m_scale ( 4 )
     , m_devType ( VirtualDevice::Chip8 )
     , m_virtScreenWidth ( 64 )
     , m_virtScreenHeight  ( 32 )
