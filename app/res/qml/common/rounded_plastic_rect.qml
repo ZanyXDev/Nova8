@@ -1,5 +1,96 @@
 import QtQuick 2.15
 
+import QtQuick 2.15
+
+Item {
+  id: root
+
+  // === Свойства ===
+  property real cornerRadius: 20
+  property bool roundRight: true // true → закругление справа, false → слева
+  property url texture: "/res/images/textures/Plastic008_1K-JPG_Color.jpg"
+
+  // === Размеры по умолчанию ===
+  implicitWidth: 186
+  implicitHeight: 360
+
+  ShaderEffect {
+    anchors.fill: parent
+
+    // Передаём параметры в шейдер
+    property real radius: root.cornerRadius
+    property bool roundRight: root.roundRight
+    // === Ключевое: передаём разрешение в пикселях ===
+    property size resolution: Qt.size(width, height)
+
+    property var tex: ShaderEffectSource {
+      sourceItem: Image {
+        source: root.texture
+        smooth: true
+      }
+    }
+
+    vertexShader: "
+uniform highp mat4 qt_Matrix;
+attribute highp vec4 qt_Vertex;
+attribute highp vec2 qt_MultiTexCoord0;
+varying highp vec2 qt_TexCoord0;
+void main() {
+qt_TexCoord0 = qt_MultiTexCoord0;
+gl_Position = qt_Matrix * qt_Vertex;
+}
+"
+
+    fragmentShader: "
+varying highp vec2 qt_TexCoord0;
+uniform highp vec2 resolution;
+uniform highp float radius;
+uniform bool roundRight;
+uniform sampler2D tex;
+
+highp bool inRoundedRect(highp vec2 fragCoord, highp vec2 size) {
+highp vec2 p = fragCoord;
+
+if (roundRight) {
+// Закругление правых углов
+if (p.x > size.x - radius) {
+if (p.y < radius) {
+if (distance(p, vec2(size.x - radius, radius)) > radius) return false;
+} else if (p.y > size.y - radius) {
+if (distance(p, vec2(size.x - radius, size.y - radius)) > radius) return false;
+}
+}
+} else {
+// Закругление левых углов
+if (p.x < radius) {
+if (p.y < radius) {
+if (distance(p, vec2(radius, radius)) > radius) return false;
+} else if (p.y > size.y - radius) {
+if (distance(p, vec2(radius, size.y - radius)) > radius) return false;
+}
+}
+}
+return true;
+}
+
+void main() {
+highp vec2 uv = qt_TexCoord0;
+highp vec2 size = resolution; // размер в пикселях
+highp vec2 fragCoord = uv * size;
+
+if (!inRoundedRect(fragCoord, size)) {
+gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+return;
+}
+
+// Просто выводим текстуру (в sRGB, без gamma-коррекции для простоты)
+gl_FragColor = texture2D(tex, uv);
+}
+"
+  }
+}
+
+/**
 Item {
   id: root
 
@@ -111,10 +202,11 @@ void main() {
 highp vec2 uv = qt_TexCoord0;
 highp vec2 pos = uv * resolution;
 
-if (!inShape(pos, resolution)) {
-gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-return;
-}
+// if (!inShape(pos, resolution)) {
+// gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+// return;
+// }
+gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0); // Зелёный
 
 // === Загрузка карт ===
 highp vec3 albedo = pow(texture2D(texAlbedo, uv).rgb, vec3(2.2)); // sRGB → linear
@@ -176,3 +268,5 @@ gl_FragColor = vec4(color * intensity, 1.0);
 "
   }
 }
+*/
+
