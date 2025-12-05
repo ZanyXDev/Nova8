@@ -25,7 +25,7 @@ QQC2.ApplicationWindow {
 
   // ----- Size information
   width: (screenOrientation === Qt.PortraitOrientation) ? 360 : 640
-  height: (screenOrientation === Qt.PortraitOrientation) ? 640 : 360
+  height: (screenOrientation === Qt.PortraitOrientation) ? 640 * 1.5 : 360 * 1.5
   maximumHeight: height
   maximumWidth: width
 
@@ -58,10 +58,11 @@ QQC2.ApplicationWindow {
     PlasticRectangle {
       id: leftPad
       anchors.fill: parent
-      roundedCornerRaduis: 35
+      roundedCornerRadius: 35
       isLeftSide: true
-      lightAngle: 45
+      lightAngle: 15
       lightElevation: 75
+      maxPerformance: false
     }
   }
   RowLayout {

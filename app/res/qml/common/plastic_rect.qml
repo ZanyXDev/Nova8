@@ -4,13 +4,14 @@ Item {
   id: root
   property bool antialiasing: true
   property bool lighting: true
-  property bool maxPerfomance: true
+  property bool maxPerformance: true
   property bool isLeftSide: true
-  property real roundedCornerRaduis: 35
+  property real roundedCornerRadius: 35
   // === Текстуры ===
   property url albedoMap: "qrc:/res/images/textures/Plastic008_1K-JPG_Color.jpg"
   property url normalMap: "qrc:/res/images/textures/Plastic008_1K-JPG_NormalDX.jpg" // ← используем DirectX-версию
   property url roughnessMap: "qrc:/res/images/textures/Plastic008_1K-JPG_Roughness.jpg"
+  property url heightMap: "qrc:/res/images/textures/Plastic008_1K-JPG_Displacement.jpg"
 
   // === Освещение ===
   property real lightAngle: 45 // азимут (градусы) направление света (0° = справа, 90° = снизу и т.д.)
@@ -50,9 +51,21 @@ Item {
         smooth: true
       }
     }
+    property var texHeight: ShaderEffectSource {
+      sourceItem: Image {
+        source: root.heightMap
+        smooth: true
+      }
+    }
+    // масштаб высоты (для расчёта производных)
+    property real heightScale: 0.02
+    // насколько сильно затемнять
+    property real aoFromHeightStrength: 0.7
+    property real rimDarkness: 0.35
+    property real rimWidth: 25.0
 
     // Для скругления
-    property real radius: root.roundedCornerRaduis
+    property real radius: root.roundedCornerRadius
     property bool roundRight: root.isLeftSide
 
     // Параметры освещения — передаём в шейдер
@@ -61,13 +74,10 @@ Item {
     property real lightInt: root.lightIntensity
     property color lightCol: root.lightColor
 
-    property real rimDarkness: root.rimDarkness
-    property real rimWidth: root.rimWidth
-
     // Флаги
     property bool enableLighting: root.lighting
     property bool enableAA: root.antialiasing
-    property bool perfMode: root.maxPerfomance
+    property bool perfMode: root.maxPerformance
     // Шейдер
     fragmentShader: "
 #ifdef GL_ES
@@ -93,48 +103,83 @@ uniform vec4 lightCol;
 uniform float rimDarkness;
 uniform float rimWidth;
 
+uniform sampler2D texHeight;
+uniform float heightScale;
+uniform float aoFromHeightStrength;
+
 varying vec2 qt_TexCoord0;
+
+// Возвращает тёмный коэффициент на краях рельефа
+float calculatePseudoAO(sampler2D heightMap, vec2 uv, vec2 texelSize, float strength) {
+float h = texture2D(heightMap, uv).r;
+
+// Берём соседние пиксели
+float hN = texture2D(heightMap, uv + vec2(0.0, -texelSize.y)).r;
+float hS = texture2D(heightMap, uv + vec2(0.0,  texelSize.y)).r;
+float hE = texture2D(heightMap, uv + vec2( texelSize.x, 0.0)).r;
+float hW = texture2D(heightMap, uv + vec2(-texelSize.x, 0.0)).r;
+
+// Градиенты
+vec2 grad = vec2(hE - hW, hN - hS) * 0.5;
+
+// Магнитуда градиента = насколько резко меняется высота
+float edge = length(grad);
+
+// Чем резче край — тем темнее (AO)
+// Но инвертируем: в глубоких трещинах тоже темно → можно использовать второй проход
+// Пока используем простую формулу
+float ao = 1.0 - edge * strength;
+
+// Ограничиваем, чтобы не было светлее 1
+return clamp(ao, 0.3, 1.0);
+}
 
 // Упрощённая функция сглаживания скругления
 float roundedBoxSDF(vec2 p, vec2 b, float r) {
 vec2 q = abs(p) - b + r;
 return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
 }
-
 // Функция для скругления только с одной стороны
-float sideRoundedRectSDF(vec2 uv, vec2 size, float r, bool roundRightSide) {
+float sideRoundedRectSDF(vec2 uv, vec2 size, float radius, bool roundRightSide) {
 vec2 center = size * 0.5;
 vec2 p = uv - center;
+float w = size.x * 0.5;
+float h = size.y * 0.5;
+float r = min(radius, h);
 
-vec2 halfSize = size * 0.5;
-halfSize.x -= r; // уменьшаем по X, чтобы радиус не вылезал
+if (r <= 0.01) {
+return max(abs(p.x) - w, abs(p.y) - h);
+}
 
 if (roundRightSide) {
-// Скругляем ПРАВУЮ сторону
-if (p.x > 0.0) {
-return roundedBoxSDF(p, halfSize, r);
+if (p.x >= 0.0) {
+return roundedBoxSDF(p, vec2(w, h), r);
 } else {
-// Левая сторона — прямая
-return max(abs(p.y) - halfSize.y, -p.x - halfSize.x);
+return max(abs(p.x) - w, abs(p.y) - h);
 }
 } else {
-// Скругляем ЛЕВУЮ сторону
-if (p.x < 0.0) {
-return roundedBoxSDF(p, halfSize, r);
+if (p.x <= 0.0) {
+return roundedBoxSDF(p, vec2(w, h), r);
 } else {
-// Правая сторона — прямая
-return max(abs(p.y) - halfSize.y, p.x - halfSize.x);
+return max(abs(p.x) - w, abs(p.y) - h);
 }
 }
 }
 
 void main() {
+
+
+vec2 texelSize = 1.0 / resolution;
+float pseudoAO = 1.0;
+if (!perfMode) {
+pseudoAO = calculatePseudoAO(texHeight, qt_TexCoord0, texelSize, aoFromHeightStrength);
+}
+
 vec2 uv = qt_TexCoord0 * resolution;
 vec2 size = resolution;
 
 float d = sideRoundedRectSDF(uv, size, radius, roundRight);
 
-// Альфа-канал и обрезка
 float alpha = 1.0;
 if (enableAA) {
 float coverage = smoothstep(-1.0, 1.0, -d);
@@ -144,21 +189,20 @@ if (d > 0.0) discard;
 }
 if (alpha <= 0.0) discard;
 
-// Базовые текстуры
 vec3 albedo = texture2D(texAlbedo, qt_TexCoord0).rgb;
 vec3 normal = texture2D(texNormal, qt_TexCoord0).rgb;
 normal = normal * 2.0 - 1.0;
 normal.y = -normal.y;
 normal = normalize(normal);
 
-float roughness = perfMode ? 0.8 : texture2D(texRough, qt_TexCoord0).r;
+float roughness = perfMode ? 0.3 : texture2D(texRough, qt_TexCoord0).r;
 
-// === ЭФФЕКТ ОБЪЁМА: затемнение у краёв ===
-float edgeDist = -d; // внутри фигуры: d < 0 → edgeDist > 0
-float rimFactor = smoothstep(0.0, rimWidth, edgeDist); // 0 у края, 1 в центре
-float occlusion = mix(1.0 - rimDarkness, 1.0, rimFactor); // темнее у края
+float edgeDist = -d;
+float rimFactor = smoothstep(0.0, rimWidth, edgeDist);
+float rimOcclusion = mix(1.0 - rimDarkness, 1.0, rimFactor);
+float totalOcclusion = pseudoAO * rimOcclusion;
 
-vec3 color = albedo * occlusion;
+vec3 color = albedo * totalOcclusion;
 
 if (enableLighting) {
 vec3 lightDir;
@@ -167,23 +211,18 @@ lightDir.y = sin(lightAzimuthRad) * cos(lightElevationRad);
 lightDir.z = sin(lightElevationRad);
 lightDir = normalize(lightDir);
 
-// Diffuse
 float NdotL = max(dot(normal, lightDir), 0.0);
 vec3 diffuse = albedo * NdotL;
 
-// Specular (Blinn-style)
 vec3 viewDir = vec3(0.0, 0.0, 1.0);
 vec3 halfDir = normalize(lightDir + viewDir);
 float NdotH = max(dot(normal, halfDir), 0.0);
 float spec = pow(NdotH, 256.0 * (1.0 - roughness + 0.01));
 
-vec3 specular = vec3(0.0); // non-metal
-if (!perfMode) {
-specular = albedo * spec * 0.5; // слегка добавим specular от альбедо даже для пластика
-}
+vec3 specular = vec3(0.04) * spec * lightInt; // f0 = 0.04 для пластика
 
-color = (diffuse + specular * lightInt) * lightCol.rgb;
-color *= occlusion; // освещение тоже затемняется у краёв
+color = (diffuse + specular) * lightCol.rgb;
+color *= totalOcclusion;
 }
 
 gl_FragColor = vec4(color, alpha);
