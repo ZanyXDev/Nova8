@@ -8,5 +8,6 @@
         <file>res/qml/main.qml</file>
         <file>res/qml/pages/init_page.qml</file>
         <file>res/qml/pages/qmldir</file>
+        <file>res/qml/common/rounded_plastic_rect.qml</file>
     </qresource>
 </RCC>

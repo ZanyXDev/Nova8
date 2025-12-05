@@ -2,3 +2,4 @@ module common
 singleton AppSingleton 1.0 app_singleton.qml
 AppVersionTxt 1.0 app_ver_txt.qml
 FadeStackLayout 1.0 fade_stack_layout.qml
+RoundedPlasticRect 1.0 rounded_plastic_rect.qml
