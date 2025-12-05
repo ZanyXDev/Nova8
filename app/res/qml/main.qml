@@ -39,7 +39,8 @@ QQC2.ApplicationWindow {
 
   title: (isMobile) ? qsTr(" ") : Qt.application.name
   onAppInForegroundChanged: {
-    AppSingleton.toLog(`appInForeground: [${appInForeground}] Qt.application.version ${Qt.application.version}`)
+    AppSingleton.toLog(
+          `appInForeground: [${appInForeground}] Qt.application.version ${Qt.application.version}`)
     if (appInForeground) {
 
       //paused
@@ -51,12 +52,12 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
-  RoundedPlasticRect {
+  PlasticRectangle {
     id: leftPad
     Layout.preferredWidth: 182
     Layout.fillHeight: true
-    cornerRadius: 35
-    roundRight: false
+    roundedCornerRaduis: 35
+    isLeftSide: true
     lightAngle: 45
     lightElevation: 45
   }

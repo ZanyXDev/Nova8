@@ -15,7 +15,7 @@ CONFIG += qmltypes
 # Force C++17 if available
 contains(QT_CONFIG, c++1z): CONFIG += c++1z
 # Enable CCache
-load(ccache)
+#load(ccache)
 
 DEFINES += VERSION_STR=\\\"$$cat(version.txt)\\\"
 DEFINES += PACKAGE_NAME_STR=\\\"$$cat(package_name.txt)\\\"

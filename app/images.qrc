@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/images/cover.svg</file>
         <file>res/images/cover_nova.svg</file>
         <file>res/images/textures/Plastic008_1K-JPG_Color.jpg</file>
         <file>res/images/textures/Plastic008_1K-JPG_Displacement.jpg</file>
