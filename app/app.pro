@@ -31,18 +31,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
+        src/engine.h \
+        src/imageprovider.h \
         src/datamanager.h \
-        src/hal.h 
+        src/hal.h  \
+        src/keyboard.h \
+        src/virtualdevice.h
 
 SOURCES += \
+            src/engine.cpp \
+            src/imageprovider.cpp \
             src/datamanager.cpp \
+            src/keyboard.cpp \
             src/main.cpp \
-            src/hal.cpp 
+            src/hal.cpp  \
+            src/virtualdevice.cpp
 
 RESOURCES += \       
         qml.qrc \
-        fonts.qrc 
-#        images.qrc \
+        fonts.qrc \
+        images.qrc
 #        sounds.qrc
         #js.qrc
         #Translate

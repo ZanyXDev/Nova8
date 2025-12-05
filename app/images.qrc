@@ -1,40 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/images/graphics/basketbottomleft.png</file>
-        <file>res/images/graphics/basketbottomright.png</file>
-        <file>res/images/graphics/baskettopleft.png</file>
-        <file>res/images/graphics/baskettopright.png</file>
-        <file>res/images/graphics/belldown.png</file>
-        <file>res/images/graphics/bellup.png</file>
-        <file>res/images/graphics/brokenegg.png</file>
-        <file>res/images/graphics/busheswolfleft.png</file>
-        <file>res/images/graphics/busheswolfright.png</file>
-        <file>res/images/graphics/chicken0.png</file>
-        <file>res/images/graphics/chicken1.png</file>
-        <file>res/images/graphics/chicken2.png</file>
-        <file>res/images/graphics/chicken3.png</file>
-        <file>res/images/graphics/chickenbushes.png</file>
-        <file>res/images/graphics/classic.png</file>
-        <file>res/images/graphics/egg0.png</file>
-        <file>res/images/graphics/egg1.png</file>
-        <file>res/images/graphics/egg2.png</file>
-        <file>res/images/graphics/egg3.png</file>
-        <file>res/images/graphics/lcdbottom.png</file>
-        <file>res/images/graphics/lcdbottomleft.png</file>
-        <file>res/images/graphics/lcdbottomright.png</file>
-        <file>res/images/graphics/lcdmiddle.png</file>
-        <file>res/images/graphics/lcdtop.png</file>
-        <file>res/images/graphics/lcdtopleft.png</file>
-        <file>res/images/graphics/lcdtopright.png</file>
-        <file>res/images/graphics/leftroostsoverlay.png</file>
-        <file>res/images/graphics/lifecounter.png</file>
-        <file>res/images/graphics/menu.svg</file>
-        <file>res/images/graphics/quick.png</file>
-        <file>res/images/graphics/rabbit.png</file>
-        <file>res/images/graphics/rightroostsoverlay.png</file>
-        <file>res/images/graphics/speaker_loud.svg</file>
-        <file>res/images/graphics/speaker_mute.svg</file>
-        <file>res/images/graphics/wolfleft.png</file>
-        <file>res/images/graphics/wolfright.png</file>
+        <file>res/images/cover.svg</file>
+        <file>res/images/cover_nova.svg</file>
     </qresource>
 </RCC>
