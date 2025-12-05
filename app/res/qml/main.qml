@@ -52,16 +52,18 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
-  PlasticRectangle {
-    id: leftPad
-    Layout.preferredWidth: 182
-    Layout.fillHeight: true
-    roundedCornerRaduis: 35
-    isLeftSide: true
-    lightAngle: 45
-    lightElevation: 45
+  Rectangle {
+    anchors.fill: parent
+    color: "grey"
+    PlasticRectangle {
+      id: leftPad
+      anchors.fill: parent
+      roundedCornerRaduis: 35
+      isLeftSide: true
+      lightAngle: 45
+      lightElevation: 75
+    }
   }
-
   RowLayout {
     visible: false
     id: main
