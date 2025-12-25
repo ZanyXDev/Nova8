@@ -51,18 +51,18 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
-  RoundedPlasticRect {
-    id: leftPad
-    Layout.preferredWidth: 182
-    Layout.fillHeight: true
-    cornerRadius: 35
-    roundRight: false
-    lightAngle: 45
-    lightElevation: 45
-  }
-
+  // RoundedPlasticRect {
+  //   id: leftPad
+  //   Layout.preferredWidth: 182
+  //   Layout.fillHeight: true
+  //   width: 182
+  //   cornerRadius: 35
+  //   roundRight: false
+  //   // lightAngle: 45
+  //   //lightElevation: 45
+  // }
   RowLayout {
-    visible: false
+
     id: main
     anchors.fill: parent
     spacing: 4
@@ -70,7 +70,56 @@ QQC2.ApplicationWindow {
       Layout.fillHeight: true
       Layout.preferredWidth: 10
     }
+    ColumnLayout {
+      id: leftButtonPlace
+      spacing: 4
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+      QQC2.Button {
+        id: startBtn
+        font {
+          family: AppSingleton.digitalFont.name
+          pointSize: AppSingleton.smallFontSize
+        }
+        text: "START"
+      }
+      QQC2.Button {
+        id: upBtn
+        font {
+          family: AppSingleton.digitalFont.name
+          pointSize: AppSingleton.smallFontSize
+        }
+        text: "UP"
+        Shortcut {
+          sequence: "Up" // Use "Up", "Down", "Left", or "Right"
+          onActivated: {
+            upBtn.clicked() // Trigger the button's onClicked handler
+          }
+        }
 
+        onClicked: {
+          console.log("Up Arrow pressed!")
+        }
+      }
+      QQC2.Button {
+        id: downBtn
+        font {
+          family: AppSingleton.digitalFont.name
+          pointSize: AppSingleton.smallFontSize
+        }
+        text: "Down"
+        Shortcut {
+          sequence: "Down" // Use "Up", "Down", "Left", or "Right"
+          onActivated: {
+            downBtn.clicked() // Trigger the button's onClicked handler
+          }
+        }
+
+        onClicked: {
+          console.log("Down Arrow pressed!")
+        }
+      }
+    }
     ColumnLayout {
       id: centralPlace
       spacing: 4
