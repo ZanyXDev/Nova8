@@ -25,7 +25,7 @@ QQC2.ApplicationWindow {
 
   // ----- Size information
   width: (screenOrientation === Qt.PortraitOrientation) ? 360 : 640
-  height: (screenOrientation === Qt.PortraitOrientation) ? 640 : 360
+  height: (screenOrientation === Qt.PortraitOrientation) ? 640 * 1.5 : 360 * 1.5
   maximumHeight: height
   maximumWidth: width
 
@@ -39,7 +39,8 @@ QQC2.ApplicationWindow {
 
   title: (isMobile) ? qsTr(" ") : Qt.application.name
   onAppInForegroundChanged: {
-    AppSingleton.toLog(`appInForeground: [${appInForeground}] Qt.application.version ${Qt.application.version}`)
+    AppSingleton.toLog(
+          `appInForeground: [${appInForeground}] Qt.application.version ${Qt.application.version}`)
     if (appInForeground) {
 
       //paused
@@ -61,6 +62,19 @@ QQC2.ApplicationWindow {
   //   // lightAngle: 45
   //   //lightElevation: 45
   // }
+  Rectangle {
+    anchors.fill: parent
+    color: "grey"
+    PlasticRectangle {
+      id: leftPad
+      anchors.fill: parent
+      roundedCornerRadius: 35
+      isLeftSide: true
+      lightAngle: 15
+      lightElevation: 75
+      maxPerformance: false
+    }
+  }
   RowLayout {
 
     id: main
