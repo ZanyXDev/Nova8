@@ -6,5 +6,10 @@
         <file>res/images/textures/Plastic008_1K-JPG_NormalDX.jpg</file>
         <file>res/images/textures/Plastic008_1K-JPG_NormalGL.jpg</file>
         <file>res/images/textures/Plastic008_1K-JPG_Roughness.jpg</file>
+        <file>res/images/textures/Wood066_1K-JPG_Color.jpg</file>
+        <file>res/images/textures/Wood066_1K-JPG_Displacement.jpg</file>
+        <file>res/images/textures/Wood066_1K-JPG_NormalDX.jpg</file>
+        <file>res/images/textures/Wood066_1K-JPG_NormalGL.jpg</file>
+        <file>res/images/textures/Wood066_1K-JPG_Roughness.jpg</file>
     </qresource>
 </RCC>
