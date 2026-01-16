@@ -9,5 +9,6 @@
         <file>res/qml/main.qml</file>
         <file>res/qml/pages/init_page.qml</file>
         <file>res/qml/pages/qmldir</file>
+        <file>res/qml/common/game_engine_part.qml</file>
     </qresource>
 </RCC>

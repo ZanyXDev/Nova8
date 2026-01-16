@@ -25,7 +25,7 @@ QQC2.ApplicationWindow {
 
   // ----- Size information
   width: (screenOrientation === Qt.PortraitOrientation) ? 360 : 640
-  height: (screenOrientation === Qt.PortraitOrientation) ? 640 * 1.5 : 360 * 1.5
+  height: (screenOrientation === Qt.PortraitOrientation) ? 640 : 360
   maximumHeight: height
   maximumWidth: width
 
@@ -52,131 +52,142 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
-  // RoundedPlasticRect {
-  //   id: leftPad
-  //   Layout.preferredWidth: 182
-  //   Layout.fillHeight: true
-  //   width: 182
-  //   cornerRadius: 35
-  //   roundRight: false
-  //   // lightAngle: 45
-  //   //lightElevation: 45
-  // }
-  Rectangle {
-    anchors.fill: parent
-    color: "grey"
-    PlasticRectangle {
-      id: leftPad
+  GameEnginePartQml {
+    id: gameEngineQmlPart
+    RowLayout {
+      id: main
       anchors.fill: parent
-      roundedCornerRadius: 35
-      isLeftSide: true
-      lightAngle: 15
-      lightElevation: 75
-      maxPerformance: false
-    }
-  }
-  RowLayout {
-
-    id: main
-    anchors.fill: parent
-    spacing: 4
-    Item {
-      Layout.fillHeight: true
-      Layout.preferredWidth: 10
-    }
-    ColumnLayout {
-      id: leftButtonPlace
       spacing: 4
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-      QQC2.Button {
-        id: startBtn
-        font {
-          family: AppSingleton.digitalFont.name
-          pointSize: AppSingleton.smallFontSize
-        }
-        text: "START"
-      }
-      QQC2.Button {
-        id: upBtn
-        font {
-          family: AppSingleton.digitalFont.name
-          pointSize: AppSingleton.smallFontSize
-        }
-        text: "UP"
-        Shortcut {
-          sequence: "Up" // Use "Up", "Down", "Left", or "Right"
-          onActivated: {
-            upBtn.clicked() // Trigger the button's onClicked handler
-          }
-        }
-
-        onClicked: {
-          console.log("Up Arrow pressed!")
-        }
-      }
-      QQC2.Button {
-        id: downBtn
-        font {
-          family: AppSingleton.digitalFont.name
-          pointSize: AppSingleton.smallFontSize
-        }
-        text: "Down"
-        Shortcut {
-          sequence: "Down" // Use "Up", "Down", "Left", or "Right"
-          onActivated: {
-            downBtn.clicked() // Trigger the button's onClicked handler
-          }
-        }
-
-        onClicked: {
-          console.log("Down Arrow pressed!")
-        }
-      }
-    }
-    ColumnLayout {
-      id: centralPlace
-      spacing: 4
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-
-      QQC2.Label {
-        id: titleText
-
-        Layout.fillWidth: true
-        Layout.preferredHeight: 36
-
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        wrapMode: Text.NoWrap
-        font {
-          family: AppSingleton.digitalFont.name
-          pointSize: AppSingleton.averageFontSize
-        }
-        color: "darkblue"
-        text: qsTr("Fancy CHIP-8")
-      }
-      Rectangle {
-        id: virtScreen
-        Layout.preferredWidth: 256
-        Layout.preferredHeight: 256
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: "transparent"
-        border {
-          color: "black"
-          width: 4
-        }
-        radius: 8
-      }
       Item {
-        Layout.fillWidth: true
-        Layout.preferredHeight: 2
+        Layout.fillHeight: true
+        Layout.preferredWidth: 10
       }
-    }
+      ColumnLayout {
+        id: leftButtonPlace
+        spacing: 4
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        QQC2.Button {
+          id: startBtn
+          font {
+            family: AppSingleton.digitalFont.name
+            pointSize: AppSingleton.smallFontSize
+          }
+          text: "START"
+        }
+        QQC2.Button {
+          id: upBtn
+          font {
+            family: AppSingleton.digitalFont.name
+            pointSize: AppSingleton.smallFontSize
+          }
+          text: "UP"
+          Shortcut {
+            sequence: "Up" // Use "Up", "Down", "Left", or "Right"
+            onActivated: {
+              upBtn.clicked() // Trigger the button's onClicked handler
+            }
+          }
 
-    Item {
-      Layout.fillHeight: true
-      Layout.preferredWidth: 10
+          onClicked: {
+            console.log("Up Arrow pressed!")
+          }
+        }
+        QQC2.Button {
+          id: downBtn
+          font {
+            family: AppSingleton.digitalFont.name
+            pointSize: AppSingleton.smallFontSize
+          }
+          text: "Down"
+          Shortcut {
+            sequence: "Down" // Use "Up", "Down", "Left", or "Right"
+            onActivated: {
+              downBtn.clicked() // Trigger the button's onClicked handler
+            }
+          }
+
+          onClicked: {
+            console.log("Down Arrow pressed!")
+          }
+        }
+      }
+      ColumnLayout {
+        id: centralPlace
+        spacing: 4
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        QQC2.Label {
+          id: titleText
+
+          Layout.fillWidth: true
+          Layout.preferredHeight: 36
+
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          wrapMode: Text.NoWrap
+          font {
+            family: AppSingleton.digitalFont.name
+            pointSize: AppSingleton.averageFontSize
+          }
+          color: "darkblue"
+          text: gameEngineQmlPart.currentPressedKeyName //qsTr("Fancy CHIP-8")
+        }
+        Rectangle {
+          id: virtScreen
+          Layout.preferredWidth: 256
+          Layout.preferredHeight: 256
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+          color: "transparent"
+          border {
+            color: "black"
+            width: 4
+          }
+          radius: 8
+          ColumnLayout {
+            anchors.fill: parent
+            id: testLight
+            spacing: 2
+            Repeater {
+              model: gameEngineQmlPart.model
+              QQC2.CheckBox {
+                text: model.keyName
+                checked: model.pressed
+              }
+            }
+          }
+        }
+
+        Item {
+          Layout.fillWidth: true
+          Layout.preferredHeight: 2
+        }
+      }
+
+      GridLayout {
+        id: rightButtonPlace
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        QQC2.Button {
+          id: zeroBtn
+          autoRepeat: false
+          font {
+            family: AppSingleton.digitalFont.name
+            pointSize: AppSingleton.smallFontSize
+          }
+          text: "0"
+          onClicked: {
+            var currentDate = '[' + new Date().toUTCString() + '] '
+            console.log(`${currentDate}:Zero pressed!`)
+          }
+        }
+      }
+
+      Item {
+        Layout.fillHeight: true
+        Layout.preferredWidth: 10
+      }
     }
   }
 
