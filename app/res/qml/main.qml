@@ -52,7 +52,46 @@ QQC2.ApplicationWindow {
 
   // ----- Signal handlers
   // ----- Qt provided visual children
+  GridLayout {
+    id: dPadLayout
+    columns: 3
+    rows: 3
+    columnSpacing: 2
+    rowSpacing: 2
+
+    Repeater {
+      model: [{
+          "row": 0,
+          "col": 1,
+          "text": "W",
+          "color": "red"
+        }, {
+          "row": 1,
+          "col": 0,
+          "text": "A",
+          "color": "green"
+        }, {
+          "row": 1,
+          "col": 2,
+          "text": "D",
+          "color": "blue"
+        }, {
+          "row": 2,
+          "col": 1,
+          "text": "S",
+          "color": "yellow"
+        }]
+      RButton {
+        Layout.row: modelData.row
+        Layout.column: modelData.col
+        id: test
+        text: modelData.text
+        textColor: modelData.color
+      }
+    }
+  }
   GameEnginePartQml {
+    visible: false
     id: gameEngineQmlPart
     RowLayout {
       id: main
